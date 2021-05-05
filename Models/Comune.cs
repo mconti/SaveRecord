@@ -22,6 +22,11 @@ namespace conti.maurizio._4H.SaveRecord.Models
             else
                 throw new System.Exception("La riga non è conforme...");
         }
+
+        public override string ToString()
+        {
+            return $"{ID}, {Ct}. {NomeComune}";
+        }
     }
 
     public class Comuni : List<Comune>
@@ -72,11 +77,15 @@ namespace conti.maurizio._4H.SaveRecord.Models
             FileStream stream = new FileStream( fileName, FileMode.Open );
             BinaryReader reader = new BinaryReader(stream);
             
+            // Cancelli tutti i tuoi record...
+            Clear();
+
             while ( stream.Position != stream.Length ){  // il modo più sicuro di accorgersi della fine del file...
                 Comune c = new Comune();
                 c.ID = reader.ReadInt32();
                 c.NomeComune = reader.ReadString();
                 c.Ct = reader.ReadString();
+                Add( c ); // aggiungi un record a te stesso (visto che sei un List<Comune>!!!!)
                 retVal++;
             }
 
